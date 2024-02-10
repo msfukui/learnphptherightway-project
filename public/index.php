@@ -16,6 +16,8 @@ define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 // https://www.php.net/manual/ja/language.basic-syntax.phpmode.php
 // https://www.php.net/manual/ja/language.variables.scope.php
 // https://www.php.net/manual/ja/function.list.php
+// https://www.php.net/manual/ja/function.abs.php
+// https://www.php.net/manual/ja/datetime.formats.php
 
 require_once APP_PATH . DIRECTORY_SEPARATOR . 'App.php';
 require_once VIEWS_PATH . DIRECTORY_SEPARATOR . 'transactions.php';
