@@ -36,11 +36,15 @@
             <tbody>
                 <?php [$v, $total_income, $total_expense] = getCsvData(); ?>
                 <?php foreach ($v as $row) : ?>
-                <tr>
-                    <td><?php echo $row[0] ?></td>
+                    <tr>
+                    <td><?php echo toDateformat($row[0]) ?></td>
                     <td><?php echo $row[1] ?></td>
                     <td><?php echo $row[2] ?></td>
-                    <td><?php echo $row[3] ?></td>
+                    <?php if (isIncome(toAmount($row[3]))) : ?>
+                        <td style="color: #00ff00"><?php echo $row[3] ?></td>
+                    <?php else : ?>
+                        <td style="color: #ff0000"><?php echo $row[3] ?></td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -55,7 +59,7 @@
                 </tr>
                 <tr>
                     <th colspan="3">Net Total:</th>
-                    <td><?php echo $total_income + $total_expense ?></td>
+                    <td><?php echo $total_income - $total_expense ?></td>
                 </tr>
             </tfoot>
         </table>
