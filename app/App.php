@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @param string $filePath
- * @return array{ { date: string, check: string, description: string, amount: float }[], float, float }
+ * @return array{ array{ date: string, check: string, description: string, amount: float }[], float, float }
  */
 function getCsvData(string $filePath): array
 {
@@ -12,7 +12,7 @@ function getCsvData(string $filePath): array
 
     $rows = [];
     foreach ($files as $file) {
-        $rows = array_merge($rows, getRows($file));
+        $rows = array_merge($rows, getRows($file, 'transactionsHandler'));
     }
 
     [$total_income, $total_expense] = getTotal(
@@ -48,9 +48,10 @@ function getFilesList(string $filesPath): array
 
 /**
  * @param string $file
+ * @param callable|null $handle
  * @return array{date: string, check: string, description: string, amount: float}[]
  */
-function getRows(string $file): array
+function getRows(string $file, ?callable $handle = null): array
 {
     $fs = fopen($file, 'r');
 
@@ -63,15 +64,32 @@ function getRows(string $file): array
     $rows = [];
 
     while ($row = fgetcsv($fs)) {
-        $rows[] = [
-            'date' => $row[0],
-            'check' => $row[1],
-            'description' => $row[2],
-            'amount' => toAmount($row[3]),
-        ];
+        if ($handle == null) {
+            // 詰める関数が提供されていない場合はそのまま詰める
+            $rows[] = $row;
+        } else {
+            // 詰める関数が提供されている場合は引き渡して詰める
+            $rows[] = $handle($row);
+        }
     }
 
     return $rows;
+}
+
+/**
+ * @param string[] $row
+ * @return array{date: string, check: string, description: string, amount: float}
+ */
+function transactionsHandler(array $row): array
+{
+    [$date, $check, $description, $amount] = $row;
+
+    return [
+        'date' => $date,
+        'check' => $check,
+        'description' => $description,
+        'amount' => toAmount($amount),
+    ];
 }
 
 /**
@@ -107,8 +125,8 @@ function isIncome(float $amount): bool
 
 function toDateformat(string $date): string
 {
-    $d = DateTimeImmutable::createFromFormat("m/d/Y", $date);
-    return $d->format("M d, Y");
+    return DateTimeImmutable::createFromFormat("m/d/Y", $date)
+        ->format("M d, Y");
 }
 
 function toAmountFormat(float $amount): string
