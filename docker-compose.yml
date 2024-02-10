@@ -1,0 +1,14 @@
+version: '2'
+services:
+  debug:
+    build: .
+    image: php8.3-cli
+    container_name: learn-php-the-right-way
+    command: bash -c "/bin/bash"
+    environment:
+      - PHP_CS_FIXER_IGNORE_ENV=1
+    tty: true
+    volumes:
+      - .:/app
+    ports:
+      - "8124:8124"

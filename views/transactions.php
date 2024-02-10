@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
     <head>
         <title>Transactions</title>
         <style>
@@ -34,20 +34,28 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- YOUR CODE -->
+                <?php [$v, $total_income, $total_expense] = getCsvData(); ?>
+                <?php foreach ($v as $row) : ?>
+                <tr>
+                    <td><?php echo $row[0] ?></td>
+                    <td><?php echo $row[1] ?></td>
+                    <td><?php echo $row[2] ?></td>
+                    <td><?php echo $row[3] ?></td>
+                </tr>
+                <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">Total Income:</th>
-                    <td><!-- YOUR CODE --></td>
+                    <td><?php echo $total_income ?></td>
                 </tr>
                 <tr>
                     <th colspan="3">Total Expense:</th>
-                    <td><!-- YOUR CODE --></td>
+                    <td><?php echo $total_expense ?></td>
                 </tr>
                 <tr>
                     <th colspan="3">Net Total:</th>
-                    <td><!-- YOUR CODE --></td>
+                    <td><?php echo $total_income + $total_expense ?></td>
                 </tr>
             </tfoot>
         </table>
