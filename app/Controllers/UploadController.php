@@ -59,7 +59,7 @@ class UploadController
             return [false, 'エラー: CSVファイル以外はアップロードできません。'];
         }
 
-        $max_size = 10 * 1024 * 1024;
+        $max_size = 1 * 1024 * 1024;
         if ($fileToUpload['size'] > $max_size) {
             return [false, 'エラー: ファイルサイズが大きすぎます。(max_size: 1MB)'];
         }
